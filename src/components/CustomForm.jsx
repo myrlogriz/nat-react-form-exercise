@@ -85,19 +85,26 @@ const CustomForm = () => {
     const password = formData.get("password");
     const tigerType = formData.get("tigerType");
 
-    let errors = [];
+    let errors = {
+      email: "",
+      password: "",
+      tigerType: "",
+    };
 
     if (!isEmail(email)) {
-      errors.push("Invalid email address");
+      errors.email = "Invalid email address";
     }
     if (!isNotEmpty(password) || !hasMinLength(password, 9)) {
-      errors.push("You must provide a password with at least 9 characters");
+      errors.password =
+        "You must provide a password with at least 9 characters";
     }
     if (!!isTigerSelected && !isNotEmpty(tigerType)) {
-      errors.push("You must provide a tiger type");
+      errors.tigerType = "You must provide a tiger type";
     }
 
-    if (errors.length > 0) {
+    const hasErrors = Object.values(errors).some((error) => error !== "");
+
+    if (hasErrors) {
       return { errors, enteredValues: { email, password, tigerType } };
     }
 
@@ -124,7 +131,7 @@ const CustomForm = () => {
           Ex. ash@gooddog.nz
         </span>
         <input
-          aria-describedby="email-hint"
+          aria-describedby="email-hint email-error"
           id="email"
           type="email"
           name="email"
@@ -134,6 +141,11 @@ const CustomForm = () => {
           autoComplete="on"
           spellCheck="false"
         />
+        {formState.errors?.email && (
+          <span id="email-error" role="alert" className="form__error">
+            {formState.errors.email}
+          </span>
+        )}
       </div>
       <div className="form__control">
         <label htmlFor="password">Password</label>
@@ -141,7 +153,7 @@ const CustomForm = () => {
           Password should be at least 9 characters long.
         </span>
         <input
-          aria-describedby="password-hint"
+          aria-describedby="password-hint password-error"
           id="password"
           type="password"
           name="password"
@@ -149,6 +161,11 @@ const CustomForm = () => {
           autoCorrect="off"
           spellCheck="false"
         />
+        {formState.errors?.password && (
+          <span id="password-error" role="alert" className="form__error">
+            {formState.errors.password}
+          </span>
+        )}
       </div>
 
       <div className="form__control">
@@ -161,7 +178,7 @@ const CustomForm = () => {
           aria-labelledby="colour"
           // While using ariaLiveMessages, I encountered a warning:
           // "Cannot update a component (`CustomForm`) while rendering a different component (`LiveRegion2`)."
-          // This warning is also present in their example at https://react-select.com/advanced
+          // This warning is also present in their example at https://reactselect.com/advanced
           // I'll skip addressing it for now.
           ariaLiveMessages={{
             onFocus: onFocusColour,
@@ -201,27 +218,23 @@ const CustomForm = () => {
 
       {!!isTigerSelected && (
         <div className="form__control">
-          <label htmlFor="tigerType">Type of Tiger</label>
+          <label htmlFor="tiger-type">Type of Tiger</label>
           <input
-            id="tigerType"
+            id="tiger-type"
             type="text"
             name="tigerType"
             value={tigerType}
             onChange={(e) => setTigerType(e.target.value)}
             placeholder="Enter type of tiger"
+            aria-labelledby="tiger-type-error"
           />
+          {formState.errors?.tigerType && (
+            <span id="tiger-type-error" role="alert" className="form__error">
+              {formState.errors.tigerType}
+            </span>
+          )}
         </div>
       )}
-      {/* All error messages are shown here, but depending on the AC,
-      they could be rendered at the top or above/below the field to which they belong. */}
-      {formState.errors && (
-        <ul className="error">
-          {formState.errors.map((error, index) => {
-            return <li key={index}>{error}</li>;
-          })}
-        </ul>
-      )}
-
       <button className="form__button">Complete</button>
     </form>
   );
