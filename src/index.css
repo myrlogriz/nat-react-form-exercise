@@ -13,7 +13,7 @@
   --border_focus: #000000;
   --input_focus: #D1B4C6;
   --input_hover: #FFE2EA;
-  --error: #ee0303;
+  --error: #EE0303;
 }
 
 #root {
@@ -35,7 +35,6 @@ body {
   font-size: 1rem;
   font-family: "Quicksand";
 }
-
 
 .layout {
   height: 100%;

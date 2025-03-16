@@ -50,13 +50,13 @@ const CustomForm = () => {
   const colourSelectRef = useRef(null);
   const animalsSelectRef = useRef(null);
 
-  const onFocusColour = ({ focused, isDisabled }) => {
+  const onFocusColour = ({ focused }) => {
     setColourMessage(
       `You are currently focused on colour option ${focused.label}`
     );
   };
 
-  const onFocusAnimals = ({ focused, isDisabled }) => {
+  const onFocusAnimals = ({ focused }) => {
     setAnimalsMessage(
       `You are currently focused on animal option ${focused.label}`
     );
